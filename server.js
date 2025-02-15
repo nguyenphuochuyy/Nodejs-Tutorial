@@ -8,8 +8,6 @@ import connect from "./database/database.js"
 import { body , validationResult } from "express-validator"
 
 dotenv.config() // bắt buộc khi khởi tạo để đọc được biến môi trường
-
-
 const app = express()
 // đọc port từ biến môi trường
 const port = process.env.PORT || 3000 
