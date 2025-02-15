@@ -3,11 +3,25 @@ import {User} from "../models/index.js"
 import Exception from "../exceptions/Exception.js"
 // import thư viện bcrypt để mã hóa mật khẩu trước khi lưu vào db
 import bcrypt from 'bcrypt'
+//tên tham số password phải nhận ở hàm này luôn giống vói tham số trong destructuring ở controller 
+const login = async ({email , password}) => {
+   
+     let existUser = await User.findOne({email}).exec();
+     if(existUser){
+        // kiểm tra mk nhập vào và mật khẩu đã mã hóa có giống nhau không , phải chờ xử lý xong mới tiếp tục các dòng khác
+        let isMatch = await bcrypt.compare(password,existUser.password)
+        if(isMatch){
+            // tạo JWT
+        }
+        else{
+            throw new Exception(Exception.WRONG_EMAIL_OR_PASSWORD);
+        }
+     }
+     else
+     {
+        throw new Exception(Exception.WRONG_EMAIL_OR_PASSWORD);
+     }
 
-const login = async({email ,pass})=>{
-    print("Người dùng đăng nhập thành công" , OutputType.INFORMATION);
-    // kiểm tra mk nhập vào và mật khẩu đã mã hóa có giống nhau không , phải chờ xử lý xong mới tiếp tục các dòng khác
-     await bcrypt.compare(pass , existUser.pass)
 }
 
 const register = async({name ,email , password , age})=>{

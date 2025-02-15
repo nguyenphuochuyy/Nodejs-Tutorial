@@ -37,15 +37,22 @@ const getUserById = async(req , res)=>{
 }
 
 const userLogin = async (req ,res)=>{
-    const {email , password} = req.body
-    await userRepository.login({email, password})
-    // call repository
-    res.status(HttpsStatusCode.OK).json([
-        {
-            message : "người dùng đăng nhập thành công",
+    const {email, password} = req.body;
+    try {
 
-        }
-    ])
+        // gọi repository login() và truyền hai tham số email , password
+        await userRepository.login({email, password})
+        res.status(HttpsStatusCode.OK).json([
+            {
+                message : "người dùng đăng nhập thành công",
+            }
+        ])
+    } catch (exception) {
+        res.status(HttpsStatusCode.INTERNAL_SERVER_ERROR).json({
+            message : exception.toString()
+        })
+    }
+ 
 }
 
 const userRegister = async (req ,res)=>{
