@@ -41,10 +41,11 @@ const userLogin = async (req ,res)=>{
     try {
 
         // gọi repository login() và truyền hai tham số email , password
-        await userRepository.login({email, password})
+       let existingUser =  await userRepository.login({email, password})
         res.status(HttpsStatusCode.OK).json([
             {
                 message : "người dùng đăng nhập thành công",
+                data : existingUser
             }
         ])
     } catch (exception) {

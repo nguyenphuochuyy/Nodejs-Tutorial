@@ -6,11 +6,14 @@ import {UserRoutes , StudentRoutes} from "./routes/index.js"
 import connect from "./database/database.js"
 // import thư viện express-validator để validate dữ liệu
 import { body , validationResult } from "express-validator"
-
+// authentication middleware : khi các request gửi yêu cầu phải check xem token có đúng hay không sau đó mới tiếp tục thực hiện
+import checkToken from "./authentication/auth.js"
 dotenv.config() // bắt buộc khi khởi tạo để đọc được biến môi trường
 const app = express()
 // đọc port từ biến môi trường
 const port = process.env.PORT || 3000 
+
+app.use(checkToken);
 
 // sử dụng express json để đọc thông tin dạng json từ client 
 app.use(express.json())

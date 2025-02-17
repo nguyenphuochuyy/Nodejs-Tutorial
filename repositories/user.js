@@ -1,6 +1,7 @@
 import {print,OutputType} from "../helpers/print.js"
 import {User} from "../models/index.js"
 import Exception from "../exceptions/Exception.js"
+import jwt from 'jsonwebtoken'
 // import thư viện bcrypt để mã hóa mật khẩu trước khi lưu vào db
 import bcrypt from 'bcrypt'
 //tên tham số password phải nhận ở hàm này luôn giống vói tham số trong destructuring ở controller 
@@ -12,6 +13,22 @@ const login = async ({email , password}) => {
         let isMatch = await bcrypt.compare(password,existUser.password)
         if(isMatch){
             // tạo JWT
+           let token =  jwt.sign({
+                data : existUser
+            },process.env.JWT_SECRET,
+            // tham số thứ 3 là 1 option
+            {
+                // thời hạn của token
+                expiresIn : '10 days'
+            }
+        )
+        // clone và thêm các thuộc tính của 1 đối tượng
+        return{
+            // .toObject để lấy dữ liệu dạng thô không lấy các trường khác của mongodb
+            ...existUser.toObject(),
+            password : 'not show',
+            token : token
+        }
         }
         else{
             throw new Exception(Exception.WRONG_EMAIL_OR_PASSWORD);
