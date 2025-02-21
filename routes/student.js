@@ -1,4 +1,5 @@
 import express from "express"
+import {studentController } from '../controllers/index.js';
 
 const routes = express.Router();
 
@@ -12,4 +13,5 @@ routes.post("/login" , (req , res)=>{
     const {email , password } = req.body;
     res.send(`Student login` )
 })
+routes.post("/", studentController.insertStudent)
 export default routes

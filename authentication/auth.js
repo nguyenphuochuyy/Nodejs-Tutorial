@@ -2,7 +2,7 @@ import jwt from 'jsonwebtoken'
 import HttpsStatusCode from '../exceptions/StatusCode.js';
 export default function checkToken(req,res,next){
     // bỏ qua với login và register
-    if(req.url.toLowerCase().trim() == '/users/login' || req.url.toLowerCase().trim()  == '/uers/register'){
+    if(req.url.toLowerCase().trim() == '/users/login' || req.url.toLowerCase().trim() == '/users/register'){
         next()
         return
     }
@@ -12,11 +12,20 @@ export default function checkToken(req,res,next){
     try {
         // lấy ra đối tượng jwt để xác minh
         const jwtObject = jwt.verify(token , process.env.JWT_SECRET)
-        debugger
-    } catch (exception) {
-        res.result(HttpsStatusCode.BAD_REQUEST.json({
-            message : "bad request"
-        }))
+        const isExpired = Date.now()  >= jwtObject.exp * 1000;
+        if(isExpired){
+            res.status(HttpsStatusCode.BAD_REQUEST).json({
+                message : "token đã hết hạn"
+            })
+            res.end();
+        }
+        else {
+            next();
+        }
+    }catch(exception) {
+       res.status(HttpsStatusCode.BAD_REQUEST).json({
+        message : "bad request"
+      })
     }
     
 }

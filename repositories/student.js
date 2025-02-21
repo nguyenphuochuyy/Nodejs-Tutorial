@@ -1,3 +1,5 @@
+import { Student } from "../models/index.js";
+import Exception from "../exceptions/Exception.js"
 const login = async({email ,pass})=>{
     console.log("login student in user repository");   
 }
@@ -10,6 +12,15 @@ const getallstudents = async({
     console.log('get all user with paging');
     
 }
+const insertStudent = async({name , age , language,gender, phoneNumber })=>{
+    try {
+        const student = await Student.create({name , age , language,gender, phoneNumber })
+        return student;
+    } catch (error) {
+        throw new Exception("Thêm sinh viên thất bại")
+        
+    }  
+}
 export default {
-    login,register ,getallstudents
+    login,register ,getallstudents , insertStudent 
 }

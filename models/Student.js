@@ -8,9 +8,10 @@ export default mongoose.model('Student',
                 type : String,
                 required : true,
                 validate : {
-                    validator : (value) => value.lenght > 10,
-                    message : "Tên phải lớn hơn 10 ký tự" 
+                    validator : (name)=> name.length > 3 ,
+                    message : "Tên phải lớn hơn 3 kí tự"
                 }
+              
             },
             age : {
                 type : String,
@@ -31,7 +32,7 @@ export default mongoose.model('Student',
                 type : String,
                 required : true ,
                 validate : {
-                    validator:(phoneNumber) => phoneNumber.lenght > 5 ,
+                    validator: (value)=> value.length > 8 ,
                     message : "Số điện thoại phải lớn hơn 5 kí tự"
                 }
             }
